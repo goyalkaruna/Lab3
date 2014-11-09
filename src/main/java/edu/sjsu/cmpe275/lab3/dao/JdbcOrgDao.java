@@ -19,7 +19,7 @@ private DataSource datasource;
 		this.datasource = datasource;
 	}
 	
-	 public void insertOrg(Organization org){
+	 public boolean insertOrg(Organization org){
 		 String sql = "Insert into Organization() values ()";
 		 Connection conn = null;
 		 try{
@@ -28,6 +28,7 @@ private DataSource datasource;
 			 ps.setLong(1, org.getId());
              ps.executeUpdate();
              ps.close();
+             return true;
 		 }catch (SQLException e) {
 			 throw new RuntimeException(e);
 		 }finally {
@@ -39,7 +40,7 @@ private DataSource datasource;
 		 }
 	 }
 
-	public void updateOrg(Organization org) {
+	public int updateOrg(Organization org) {
 		Connection dbConnection = null;
 	    Statement statement = null;
 
@@ -55,6 +56,7 @@ private DataSource datasource;
 
 	      System.out.println("Record is updated into Organization table for Organization id : "
 	                      + org.getId());
+	      return 200;
 	    }
 	    catch( SQLException e )
 	    {
@@ -85,9 +87,10 @@ private DataSource datasource;
 	        }
 	      }
 	    }
+	    return 404;
 	}
 
-	public void deleteOrg(Long Id) {
+	public int deleteOrg(Long Id) {
 		
 //		String deleteStatement = "DELETE FROM hosts WHERE id=?";
 //		 Connection conn = null;
@@ -120,7 +123,7 @@ private DataSource datasource;
 
 	      System.out.println("Record is deleted from Person table for Person id : "
 	                      + Id);
-
+          return 200;
 	    }
 	    catch( SQLException e )
 	    {
@@ -156,6 +159,7 @@ private DataSource datasource;
 	      }
 
 	    }
+	    return 404;
 	  }
 		
 	

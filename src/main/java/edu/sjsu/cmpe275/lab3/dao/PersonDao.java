@@ -4,8 +4,8 @@ import edu.sjsu.cmpe275.lab3.forms.Person;
 
 public interface PersonDao {
 
-	  public void insertPerson(Person person);
-	  public void updatePerson(Person person);
-	  public void deletePerson(Long Id);
+	  public boolean insertPerson(Person person);
+	  public int updatePerson(Person person);
+	  public int deletePerson(Long Id);
 	  public Person findbyPersonId(Long Id);
 }

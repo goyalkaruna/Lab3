@@ -15,14 +15,21 @@ public class PersonService {
 	}
 
 	
-	public void storePerson(Person pro) {
+	public boolean storePerson(Person pro) {
 		// TODO Auto-generated method stub
 
-		dao.insertPerson(pro);
+		boolean value = dao.insertPerson(pro);
 		System.out.println("Person Stored");
+		return value;
 	}
 
+	public int deletePerson(Long userId){
+		int v = dao.deletePerson(userId);
+		return v;
+	}
 	
-	
-
+   public int updatePerson(Person person){
+	  int value= dao.updatePerson(person);
+	  return value;
+   }
 }

@@ -5,8 +5,8 @@ import edu.sjsu.cmpe275.lab3.forms.Person;
 
 public interface OrganizationDao {
    
-	 public void insertOrg(Organization org);
-	  public void updateOrg(Organization org);
-	  public void deleteOrg(Long Id);
+	 public boolean insertOrg(Organization org);
+	  public int updateOrg(Organization org);
+	  public int deleteOrg(Long Id);
 	  public Organization findbyOrgId(Long Id);
 }

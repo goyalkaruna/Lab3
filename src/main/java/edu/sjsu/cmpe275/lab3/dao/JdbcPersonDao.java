@@ -22,15 +22,17 @@ public class JdbcPersonDao implements PersonDao{
 		this.datasource = datasource;
 	}
 	
-	 public void insertPerson(Person person){
+	 public boolean insertPerson(Person person){
 		 String sql = "Insert into Person() values ()";
 		 Connection conn = null;
 		 try{
 			 conn= datasource.getConnection();
 			 PreparedStatement ps =conn.prepareStatement(sql);
 			 ps.setLong(1, person.getId());
+			 ps.setString(2, person.getFirstname());
              ps.executeUpdate();
              ps.close();
+             return true;
 		 }catch (SQLException e) {
 			 throw new RuntimeException(e);
 		 }finally {
@@ -40,9 +42,10 @@ public class JdbcPersonDao implements PersonDao{
 				 }catch (SQLException e) {}
 			 }
 		 }
+		 
 	 }
 
-	public void updatePerson(Person person) {
+	public int updatePerson(Person person) {
 		Connection dbConnection = null;
 	    Statement statement = null;
 
@@ -58,6 +61,7 @@ public class JdbcPersonDao implements PersonDao{
 
 	      System.out.println("Record is updated into Employee table for Employee id : "
 	                      + person.getId());
+	      return 200;
 	    }
 	    catch( SQLException e )
 	    {
@@ -88,9 +92,10 @@ public class JdbcPersonDao implements PersonDao{
 	        }
 	      }
 	    }
+	    return 404;
 	}
 
-	public void deletePerson(Long Id) {
+	public int deletePerson(Long Id) {
 		
 //		String deleteStatement = "DELETE FROM hosts WHERE id=?";
 //		 Connection conn = null;
@@ -123,7 +128,7 @@ public class JdbcPersonDao implements PersonDao{
 
 	      System.out.println("Record is deleted from Person table for Person id : "
 	                      + Id);
-
+         return 200;
 	    }
 	    catch( SQLException e )
 	    {
@@ -157,8 +162,9 @@ public class JdbcPersonDao implements PersonDao{
 	          e.printStackTrace();
 	        }
 	      }
-
+            
 	    }
+	    return 404;
 	  }
 		
 	
