@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.lab3.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,8 @@ import edu.sjsu.cmpe275.lab3.dao.OrganizationDao;
 import edu.sjsu.cmpe275.lab3.dao.PersonDao;
 import edu.sjsu.cmpe275.lab3.forms.Organization;
 import edu.sjsu.cmpe275.lab3.forms.Person;
+import edu.sjsu.cmpe275.lab3.service.OrganizationService;
+import edu.sjsu.cmpe275.lab3.service.PersonService;
 
 @Controller
 @RequestMapping("/")
@@ -21,6 +24,15 @@ public class AllController {
 
 	PersonDao pd = new JdbcPersonDao();
 	OrganizationDao od = new JdbcOrgDao();
+	OrganizationService os;
+	PersonService ps;
+	
+	@Autowired
+	public AllController(OrganizationService os, PersonService ps){
+		
+		this.os = os;
+		this.ps = ps;
+	}
 	
 	
 	@RequestMapping(value = "/person/{id}", method = RequestMethod.GET)
@@ -71,7 +83,7 @@ public class AllController {
 	@RequestMapping(value = "/person/{id}",  method = RequestMethod.DELETE)
 	   public String deleteOnePerson(@PathVariable("id") String id, Model model){
 		
-		Person tmp = pd.deletePerson(id);
+		Person tmp = pd.deletePerson(Long.parseLong(id));
 		if(tmp != null){
 			
 			model.addAttribute("person", tmp);
@@ -94,6 +106,7 @@ public class AllController {
 			model.addAttribute("org", tmp);
 			return "org";
 		}
+		else{return "404";}
 	}
 	
 	@RequestMapping(value = "/org", method = RequestMethod.POST)
