@@ -7,7 +7,10 @@ import java.sql.SQLException;
 
 
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
+import edu.sjsu.cmpe275.lab3.forms.Address;
 import edu.sjsu.cmpe275.lab3.forms.Organization;
 import edu.sjsu.cmpe275.lab3.forms.Person;
 
@@ -172,31 +175,36 @@ public class JdbcPersonDao implements PersonDao{
 		
 	
 
-	public Person findbyPersonId(int Id) {
+	public List<Object> findbyPersonId(int Id) {
 		  
-	 
+	        List<Object> list = new ArrayList<Object>();
 		    Connection conn = null;
 		    Statement stmt = null;
 		    ResultSet rs = null;
 		    try
 		    {
 		      conn= datasource.getConnection();
-		      String query = "SELECT * FROM person as p, address as a , organization as o"
-		      		+ " where p.Person_id="+Id +"and p.Org_id= o.Org_id and p.Add_id= a.Add_id";
+		      String query = "SELECT * FROM person"
+		      		+ " where Person_id="+Id ;
 		      stmt = conn.createStatement();
 		      rs = stmt.executeQuery(query);
 		      while( rs.next() )
 		      {
 		        Person person = new Person();
-		        Object object = new Object();
+		        Address add = new Address();
+		        Organization org = new Organization();
 		        person.setId(rs.getInt("Person_id"));
 		        person.setFirstname(rs.getString("FirstName"));
 		        person.setLastname(rs.getString("LastName"));
 		        person.setEmail(rs.getString("Email"));
 		        person.setDescription(rs.getString("Description"));
 		     //  rs.getString("Add_id"));
-		       
-		        return person;
+		        add.setAdd_id(rs.getInt("Add_id"));
+		        org.setId(rs.getInt("Org_id"));
+		        list.add(person);
+		        list.add(add);
+		        list.add(org);
+		        return list;
 		      }
 		    }
 		    catch( SQLException e )

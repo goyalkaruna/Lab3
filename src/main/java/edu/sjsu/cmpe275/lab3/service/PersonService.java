@@ -1,9 +1,13 @@
 package edu.sjsu.cmpe275.lab3.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.sjsu.cmpe275.lab3.dao.JdbcAddressDao;
 import edu.sjsu.cmpe275.lab3.dao.JdbcOrgDao;
 import edu.sjsu.cmpe275.lab3.dao.JdbcPersonDao;
 import edu.sjsu.cmpe275.lab3.forms.Address;
+import edu.sjsu.cmpe275.lab3.forms.Organization;
 import edu.sjsu.cmpe275.lab3.forms.Person;
 
 public class PersonService {
@@ -11,10 +15,19 @@ public class PersonService {
     JdbcPersonDao dao = new JdbcPersonDao();
     JdbcAddressDao addDao = new JdbcAddressDao();
     JdbcOrgDao orgDao = new JdbcOrgDao();
+	
+    @SuppressWarnings("unchecked")
 	public Person getProfile(int userId) {
 		
-		Person person = dao.findbyPersonId(userId);
-		
+		List<Object> list = new ArrayList<Object>();
+		list = (List<Object>) dao.findbyPersonId(userId);
+		Person person = (Person) list.get(0);
+		Address address =(Address)list.get(1);
+		Organization org =(Organization)list.get(2);
+		address= addDao.findbyAddressId(address.getAdd_id());
+		org = orgDao.findbyOrgId(org.getId());
+		person.setAddress(address);
+		person.setOrg(org);
 		if(person==null){return null;}
 		else{return person;}
 	}
@@ -35,9 +48,19 @@ public class PersonService {
 	}
 
 	public Person deletePerson(int userId){
-		Person person = dao.findbyPersonId(userId);
-		int v= dao.deletePerson(userId);
-		if (v==200){
+		List<Object> list = new ArrayList<Object>();
+		list = (List<Object>) dao.findbyPersonId(userId);
+		Person person = (Person) list.get(0);
+		Address address =(Address)list.get(1);
+		Organization org =(Organization)list.get(2);
+		address= addDao.findbyAddressId(address.getAdd_id());
+		org = orgDao.findbyOrgId(org.getId());
+		person.setAddress(address);
+		person.setOrg(org);
+		int v1= dao.deletePerson(userId);
+		int v2 = addDao.deleteAddress(org.getId());
+		int v3 = orgDao.deleteOrg(address.getAdd_id());
+		if (v1==200 && v2==200 && v3==200){
 			return person;}
 			else
 				return null;	
