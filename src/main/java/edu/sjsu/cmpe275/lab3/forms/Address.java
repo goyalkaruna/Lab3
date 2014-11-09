@@ -1,10 +1,19 @@
 package edu.sjsu.cmpe275.lab3.forms;
 
 public class Address {
-	 private String street;
+	    private int Add_id;
+	    private String street;
 	    private String city;
 	    private String state;
 	    private String zip;
+		
+	    
+	    public int getAdd_id() {
+			return Add_id;
+		}
+		public void setAdd_id(int add_id) {
+			Add_id = add_id;
+		}
 		public String getStreet() {
 			return street;
 		}

@@ -1,11 +1,12 @@
 package edu.sjsu.cmpe275.lab3.service;
 
+import edu.sjsu.cmpe275.lab3.dao.JdbcOrgDao;
 import edu.sjsu.cmpe275.lab3.dao.OrganizationDao;
 import edu.sjsu.cmpe275.lab3.forms.Organization;
 
 public class OrganizationService {
   
-	OrganizationDao dao = new OrganizationDao() {
+	OrganizationDao dao = new JdbcOrgDao();
 		
 		public int updateOrg(Organization org) {
 			int value= dao.updateOrg(org);
@@ -23,11 +24,12 @@ public class OrganizationService {
 			return org;
 		}
 		
-		public int deleteOrg(Long Id) {
+		public Organization deleteOrg(Long Id) {
+			Organization org = dao.findbyOrgId(Id);
 			int value = dao.deleteOrg(Id);
-			return value;
-			
-		}
-	};
-	
+			if (value == 200){
+				return org;
+			}else
+				return null;
+		}	
 }

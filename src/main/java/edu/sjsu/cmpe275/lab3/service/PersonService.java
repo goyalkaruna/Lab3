@@ -23,9 +23,15 @@ public class PersonService {
 		return value;
 	}
 
-	public int deletePerson(Long userId){
-		int v = dao.deletePerson(userId);
-		return v;
+	public Person deletePerson(Long userId){
+	    Person person = dao.findbyPersonId(userId);
+		int v= dao.deletePerson(userId);
+		if (v==200){
+			return person;}
+			else
+				return null;
+		
+		
 	}
 	
    public int updatePerson(Person person){
