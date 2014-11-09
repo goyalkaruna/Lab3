@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-package edu.sjsu.cmpe275.lab3.service;
-
-public class OrganizationService {
- 
-	
-}
-=======
 package edu.sjsu.cmpe275.lab3.service;
 
 import edu.sjsu.cmpe275.lab3.dao.OrganizationDao;
@@ -39,4 +31,3 @@ public class OrganizationService {
 	};
 	
 }
->>>>>>> 32882d8581e2479483a8cfc19ba2853a3a1cf1c3
