@@ -23,16 +23,28 @@ public class JdbcPersonDao implements PersonDao{
 	}
 	
 	 public boolean insertPerson(Person person){
-		 String sql = "Insert into Person() values ()";
+		 String sql = "Insert into Person(Person_id, FirstName, LastName, Email, Description, Org_id, Add_id) "
+		 		+ "values (?, ?,?, ?, ?, ?,?)";
 		 Connection conn = null;
 		 try{
 			 conn= datasource.getConnection();
 			 PreparedStatement ps =conn.prepareStatement(sql);
 			 ps.setLong(1, person.getId());
 			 ps.setString(2, person.getFirstname());
-             ps.executeUpdate();
+			 ps.setString(3, person.getLastname());
+			 ps.setString(4,person.getEmail());
+			 ps.setString(5, person.getDescription());
+			 ps.setLong(6, person.getOrg().getId());
+			 ps.setLong(7, person.getAddress().getAdd_id());
+             int x= ps.executeUpdate();
              ps.close();
-             return true;
+             if (x>0){
+            	 return true;
+             }
+             else 
+            	 return false;
+            
+            
 		 }catch (SQLException e) {
 			 throw new RuntimeException(e);
 		 }finally {
@@ -57,11 +69,15 @@ public class JdbcPersonDao implements PersonDao{
 	    
 	      dbConnection = datasource.getConnection();
 	      statement = dbConnection.prepareStatement(sql);
-	      statement.executeUpdate(sql);
+	      int rowsupdated = statement.executeUpdate(sql);
 
 	      System.out.println("Record is updated into Employee table for Employee id : "
 	                      + person.getId());
-	      return 200;
+	      if(rowsupdated ==1){
+            return 200;
+	      }
+	      else 
+	    	  return 404;
 	    }
 	    catch( SQLException e )
 	    {
@@ -116,19 +132,22 @@ public class JdbcPersonDao implements PersonDao{
 //		 }
 		Connection dbConnection = null;
 	    Statement statement = null;
-
-	    String sql = "delete from person where employee_Id="+ Id;
+      
+	    String sql = "delete from person where Person_id="+ Id;
 
 	    try
 	    {
 	      
 	      dbConnection = datasource.getConnection();
 	      statement = dbConnection.prepareStatement(sql);
-	      statement.executeUpdate(sql);
-
+	      int rowsdeleted=statement.executeUpdate(sql);
+          if (rowsdeleted == 1){
 	      System.out.println("Record is deleted from Person table for Person id : "
 	                      + Id);
          return 200;
+          }
+          else 
+        	  return 404;
 	    }
 	    catch( SQLException e )
 	    {
