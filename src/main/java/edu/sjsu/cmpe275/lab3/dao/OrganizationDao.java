@@ -8,5 +8,5 @@ public interface OrganizationDao {
 	 public void insertOrg(Organization org);
 	  public void updateOrg(Organization org);
 	  public void deleteOrg(Long Id);
-	  public Person findbyOrgId(Long Id);
+	  public Organization findbyOrgId(Long Id);
 }
