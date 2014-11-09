@@ -1,14 +1,15 @@
 package edu.sjsu.cmpe275.lab3.forms;
 
 public class Organization {
-	  private long id;
+	  private int id;
 	    private String name;
 	    private String description;
 	    private Address address;
-		public long getId() {
+	
+		public int getId() {
 			return id;
 		}
-		public void setId(long id) {
+		public void setId(int id) {
 			this.id = id;
 		}
 		public String getName() {

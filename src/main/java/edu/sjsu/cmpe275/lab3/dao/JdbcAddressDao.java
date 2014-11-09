@@ -8,27 +8,31 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 
-import edu.sjsu.cmpe275.lab3.forms.Organization;
+import edu.sjsu.cmpe275.lab3.forms.Address;
 import edu.sjsu.cmpe275.lab3.forms.Person;
 
-public class JdbcOrgDao implements OrganizationDao {
-    
+public class JdbcAddressDao implements AddressDao {
+
 private DataSource datasource;
 	
 	public void setDataSource(DataSource datasource){
 		this.datasource = datasource;
 	}
-	
-	 public boolean insertOrg(Organization org){
-		 String sql = "Insert into Organization(Org_id, Name, Description, Add_id) values (?, ?, ?, ?)";
+	public boolean insertAddress(Address address) {
+		 String sql = "Insert into Organization() values ()";
 		 Connection conn = null;
 		 try{
 			 conn= datasource.getConnection();
 			 PreparedStatement ps =conn.prepareStatement(sql);
-			 ps.setLong(1, org.getId());
-             ps.executeUpdate();
+			 ps.setLong(1, address.getAdd_id());
+            
+             int x= ps.executeUpdate();
              ps.close();
-             return true;
+             if (x>0){
+            	 return true;
+             }
+             else 
+            	 return false;
 		 }catch (SQLException e) {
 			 throw new RuntimeException(e);
 		 }finally {
@@ -38,25 +42,30 @@ private DataSource datasource;
 				 }catch (SQLException e) {}
 			 }
 		 }
-	 }
+		
+	}
 
-	public int updateOrg(Organization org) {
+	public int updateAddress(Address address) {
 		Connection dbConnection = null;
 	    Statement statement = null;
 
-	    String sql = "update person set name=" + "'" + org.getDescription() + "'" + "where person_id="
-	                    + org.getId();
+	    String sql = "update person set name=" + "'" + address.getStreet() + "'" + "where person_id="
+	                    + address.getAdd_id();
 
 	    try
 	    {
 	    
 	      dbConnection = datasource.getConnection();
 	      statement = dbConnection.prepareStatement(sql);
-	      statement.executeUpdate(sql);
+	      int rowsupdated = statement.executeUpdate(sql);
 
-	      System.out.println("Record is updated into Organization table for Organization id : "
-	                      + org.getId());
-	      return 200;
+	      System.out.println("Record is updated into Employee table for Employee id : "
+	                      + address.getAdd_id());
+	      if(rowsupdated ==1){
+            return 200;
+	      }
+	      else 
+	    	  return 404;
 	    }
 	    catch( SQLException e )
 	    {
@@ -90,40 +99,25 @@ private DataSource datasource;
 	    return 404;
 	}
 
-	public int deleteOrg(int Id) {
-		
-//		String deleteStatement = "DELETE FROM hosts WHERE id=?";
-//		 Connection conn = null;
-//		 try{
-//			 conn= datasource.getConnection();
-//			 PreparedStatement ps =conn.prepareStatement(deleteStatement);
-//			// ps.setLong(1, person.getPersonId());
-//             ps.executeUpdate();
-//             ps.close();
-//		 }catch (SQLException e) {
-//			 throw new RuntimeException(e);
-//		 }finally {
-//			 if (conn !=null) {
-//				 try {
-//					 conn.close();
-//				 }catch (SQLException e) {}
-//			 }
-//		 }
+	public int deleteAddress(int Id) {
 		Connection dbConnection = null;
 	    Statement statement = null;
-
-	    String sql = "delete from person where employee_Id="+ Id;
+      
+	    String sql = "delete from address where Address_id="+ Id;
 
 	    try
 	    {
 	      
 	      dbConnection = datasource.getConnection();
 	      statement = dbConnection.prepareStatement(sql);
-	      statement.executeUpdate(sql);
-
+	      int rowsdeleted=statement.executeUpdate(sql);
+          if (rowsdeleted == 1){
 	      System.out.println("Record is deleted from Person table for Person id : "
 	                      + Id);
-          return 200;
+         return 200;
+          }
+          else 
+        	  return 404;
 	    }
 	    catch( SQLException e )
 	    {
@@ -157,31 +151,32 @@ private DataSource datasource;
 	          e.printStackTrace();
 	        }
 	      }
-
+            
 	    }
 	    return 404;
-	  }
-		
-	
+	}
 
-	public Organization findbyOrgId(int Id) {
-		  
-	 
-		    Connection conn = null;
+	public Address findbyAddressId(int Id) {
+		 Connection conn = null;
 		    Statement stmt = null;
 		    ResultSet rs = null;
 		    try
 		    {
 		      conn= datasource.getConnection();
-		      String query = "SELECT * FROM organization where organization_id="+Id;
+		      String query = "SELECT * FROM address where address_id="+Id;
 		      stmt = conn.createStatement();
 		      rs = stmt.executeQuery(query);
 		      while( rs.next() )
 		      {
-		    	Organization org = new Organization();
-		        org.setId(rs.getInt("Id"));
-		        org.setDescription(rs.getString("Desc"));       
-		        return org;
+		        Address address = new Address();
+		      
+		        address.setAdd_id(rs.getInt("Add_id"));
+		        address.setStreet(rs.getString("Street"));
+		        address.setCity(rs.getString("City"));
+		        address.setState(rs.getString("State"));
+		        address.setZip(rs.getString("Zip"));
+		      
+		        return address;
 		      }
 		    }
 		    catch( SQLException e )
@@ -213,10 +208,6 @@ private DataSource datasource;
 
 		    }
 		    return null;
-
-		
 	}
 
-
 }
-

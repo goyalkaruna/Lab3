@@ -11,7 +11,7 @@ public class PersonParameterizedRowMapper  implements ParameterizedRowMapper<Per
 
 	public Person mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Person person = new Person();
-		person.setId(rs.getLong("CUST_ID"));
+		person.setId(rs.getInt("CUST_ID"));
 		person.setFirstname(rs.getString("FirstName"));
 		person.setLastname(rs.getString("LastName"));
 		return person;

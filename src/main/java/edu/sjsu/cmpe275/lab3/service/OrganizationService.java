@@ -18,13 +18,13 @@ public class OrganizationService {
 			return value;
 		}
 		
-		public Organization findbyOrgId(Long Id) {
+		public Organization findbyOrgId(int Id) {
 			Organization org = dao.findbyOrgId(Id);
 			
 			return org;
 		}
 		
-		public Organization deleteOrg(Long Id) {
+		public Organization deleteOrg(int Id) {
 			Organization org = dao.findbyOrgId(Id);
 			int value = dao.deleteOrg(Id);
 			if (value == 200){

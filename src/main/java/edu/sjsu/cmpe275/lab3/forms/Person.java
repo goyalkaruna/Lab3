@@ -3,7 +3,7 @@ package edu.sjsu.cmpe275.lab3.forms;
 import java.util.List;
 
 public class Person {
-	 private long id;
+	 private int id;
 	    private String firstname;
 	    private String lastname;
 	    private String email;
@@ -11,10 +11,12 @@ public class Person {
 	    private Address address;
 	    private Organization org;
 	    private List<Person> friends;
-		public long getId() {
+	
+	    
+		public int getId() {
 			return id;
 		}
-		public void setId(long id) {
+		public void setId(int id) {
 			this.id = id;
 		}
 		public String getFirstname() {

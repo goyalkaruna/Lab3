@@ -7,6 +7,6 @@ public interface OrganizationDao {
    
 	 public boolean insertOrg(Organization org);
 	  public int updateOrg(Organization org);
-	  public int deleteOrg(Long Id);
-	  public Organization findbyOrgId(Long Id);
+	  public int deleteOrg(int Id);
+	  public Organization findbyOrgId(int Id);
 }
