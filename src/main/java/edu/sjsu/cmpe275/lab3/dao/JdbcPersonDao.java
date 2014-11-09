@@ -2,8 +2,11 @@ package edu.sjsu.cmpe275.lab3.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
+import java.sql.Statement;
 
 import edu.sjsu.cmpe275.lab3.forms.Person;
 
@@ -40,39 +43,177 @@ public class JdbcPersonDao implements PersonDao{
 	 }
 
 	public void updatePerson(Person person) {
-		// TODO Auto-generated method stub
-		
+		Connection dbConnection = null;
+	    Statement statement = null;
+
+	    String sql = "update person set name=" + "'" + person.getFirstname() + "'" + "where person_id="
+	                    + person.getId();
+
+	    try
+	    {
+	    
+	      dbConnection = datasource.getConnection();
+	      statement = dbConnection.prepareStatement(sql);
+	      statement.executeUpdate(sql);
+
+	      System.out.println("Record is updated into Employee table for Employee id : "
+	                      + person.getId());
+	    }
+	    catch( SQLException e )
+	    {
+	      e.printStackTrace();
+	    }
+	    finally
+	    {
+	      if( statement != null )
+	      {
+	        try
+	        {
+	          statement.close();
+	        }
+	        catch( SQLException e )
+	        {
+	          e.printStackTrace();
+	        }
+	      }
+	      if( dbConnection != null )
+	      {
+	        try
+	        {
+	          dbConnection.close();
+	        }
+	        catch( SQLException e )
+	        {
+	          e.printStackTrace();
+	        }
+	      }
+	    }
 	}
 
 	public void deletePerson(Long Id) {
 		
-		String deleteStatement = "DELETE FROM hosts WHERE id=?";
-		 Connection conn = null;
-		 try{
-			 conn= datasource.getConnection();
-			 PreparedStatement ps =conn.prepareStatement(deleteStatement);
-			// ps.setLong(1, person.getPersonId());
-             ps.executeUpdate();
-             ps.close();
-		 }catch (SQLException e) {
-			 throw new RuntimeException(e);
-		 }finally {
-			 if (conn !=null) {
-				 try {
-					 conn.close();
-				 }catch (SQLException e) {}
-			 }
-		 }
+//		String deleteStatement = "DELETE FROM hosts WHERE id=?";
+//		 Connection conn = null;
+//		 try{
+//			 conn= datasource.getConnection();
+//			 PreparedStatement ps =conn.prepareStatement(deleteStatement);
+//			// ps.setLong(1, person.getPersonId());
+//             ps.executeUpdate();
+//             ps.close();
+//		 }catch (SQLException e) {
+//			 throw new RuntimeException(e);
+//		 }finally {
+//			 if (conn !=null) {
+//				 try {
+//					 conn.close();
+//				 }catch (SQLException e) {}
+//			 }
+//		 }
+		Connection dbConnection = null;
+	    Statement statement = null;
+
+	    String sql = "delete from person where employee_Id="+ Id;
+
+	    try
+	    {
+	      
+	      dbConnection = datasource.getConnection();
+	      statement = dbConnection.prepareStatement(sql);
+	      statement.executeUpdate(sql);
+
+	      System.out.println("Record is deleted from Person table for Person id : "
+	                      + Id);
+
+	    }
+	    catch( SQLException e )
+	    {
+
+	      e.printStackTrace();
+
+	    }
+	    finally
+	    {
+
+	      if( statement != null )
+	      {
+	        try
+	        {
+	          statement.close();
+	        }
+	        catch( SQLException e )
+	        {
+	          e.printStackTrace();
+	        }
+	      }
+
+	      if( dbConnection != null )
+	      {
+	        try
+	        {
+	          dbConnection.close();
+	        }
+	        catch( SQLException e )
+	        {
+	          e.printStackTrace();
+	        }
+	      }
+
+	    }
+	  }
 		
-	}
+	
 
 	public Person findbyPersonId(Long Id) {
-		String sql = "SELECT * FROM PERSON WHERE Person_ID = ?";
-		Person person = new Person();
-//		Person  person = (Person)getJdbcTemplate().queryForObject(
-//				sql, new Object[] { Id }, new PersonRowMapper());
-//	
-		return person;
+		  
+	 
+		    Connection conn = null;
+		    Statement stmt = null;
+		    ResultSet rs = null;
+		    try
+		    {
+		      conn= datasource.getConnection();
+		      String query = "SELECT * FROM person where person_id="+Id;
+		      stmt = conn.createStatement();
+		      rs = stmt.executeQuery(query);
+		      while( rs.next() )
+		      {
+		        Person person = new Person();
+		        person.setId(rs.getLong("Employee_Id"));
+		        person.setFirstname(rs.getString("Name"));
+		        person.setLastname(rs.getString("age"));
+		        return person;
+		      }
+		    }
+		    catch( SQLException e )
+		    {
+		      e.printStackTrace();
+		    }
+
+		    finally
+		    {
+		      try
+		      {
+		        if( conn != null )
+		        {
+		          conn.close();
+		        }
+		        if( stmt != null )
+		        {
+		          stmt.close();
+		        }
+		        if( rs != null )
+		        {
+		          rs.close();
+		        }
+		      }
+		      catch( Exception exe )
+		      {
+		        exe.printStackTrace();
+		      }
+
+		    }
+		    return null;
+
 		
 	}
 
